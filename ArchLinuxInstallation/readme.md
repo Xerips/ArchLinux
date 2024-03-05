@@ -432,6 +432,9 @@ PHEW! We did it! We're back and better than ever!
 
 I'd call this a base install. Now all that's left to do is add the [black arch](https://blackarch.org/downloads.html) repo, starting hording tools, build handy scripts, work on some cool projects, and hone your skills as a bad ass cyber operator!
 
+![Qtile Bar](https://github.com/Xerips/ArchLinux/blob/main/ArchLinuxInstallation/qtile-bar.png)
+![Nvim + Tmux](https://github.com/Xerips/ArchLinux/blob/main/ArchLinuxInstallation/tmux-nvim.png)
+
 If you've taken a look at my BHP repo, you'll have seen that I go through an entire book dedicated on how to compromise a system that you have basic access to with python scripts. The reason why this book is so handy is because when you've gotten a foothold on a system, you may not have access to the tools that will allow you to easily escalate your permissions, exfil data, and a number of other nafarious tasks hackers may be interested in. It would be pretty silly of us to install all of the tools hackers may want/need on our base system. If we do this, it's effectively like handing over the keys to the castle to anyone who can get a foothold. Soooo, let's not! Instead, let's create a "Dirty Twin" of our snazzy new Arch installation in a virtual machine which we can load up with all of the pen-testing and experimental tools we could possibly want.  
 By doing this we can keep our main system clean, stabled, and safe. We avoid experimental packages that may break our system, tools that hackers could use against up, and have free reign to do whatever we want! If we toast the VM, we can just spin up another one from a snapshot.
 

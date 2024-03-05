@@ -90,13 +90,13 @@ group_names = ["1", "2", "3", "4"]
 # group_labels = ["WORK", "WWW", "SYS", "VM"]
 group_labels = ["󰇴", "󰯊", "󱨑", ""]
 
-group_layouts = ["Columns", "Columns", "Columns", "Columns"
+group_layouts = ["Columns", "Columns", "Columns", "Columns"]
 
 for i in range(len(group_names)):
     groups.append(
         Group(
             name=group_names[i],
-            layout=group_layouts[i],  # May need to add .lower() before the ",".
+            layout=group_layouts[i],
             label=group_labels[i],
         )
     )
@@ -142,7 +142,7 @@ catppuccin = {
     "arch": "#1793D1",
 }
 
-######## Layouts ######## You can find more Layouts on Qtile documentation ####
+######## Layouts ######## You can find more Layouts in Qtile documentation ####
 
 layout_theme = {
     "border_width": 2,
@@ -220,7 +220,7 @@ def init_widgets_list():
         ),
         widget.WindowName(foreground=catppuccin["blue"], max_chars=40),
         widget.GenPollText(
-            update_interval=3600,
+            update_interval=60,
             func=lambda: subprocess.check_output(
                 "printf $(uname -r | awk -F '-' '{print $1}')", shell=True, text=True
             ),
@@ -238,7 +238,7 @@ def init_widgets_list():
             distro="Arch",  # Change to "Arch_paru" or "Arch_yay" to update through AUR helper.
             display_format="  : {updates}",
             no_update_string="  : 0",
-            update_interval=3600,
+            update_interval=60,
             foreground=catppuccin["red"],
             decorations=[
                 BorderDecoration(
@@ -338,7 +338,7 @@ def init_widgets_screen1():
 
 def init_widgets_screen2():
     widgets_screen2 = init_widgets_list()
-    del widgets_screen2[22:24]
+    del widgets_screen2[24:25]
     return widgets_screen2
 
 

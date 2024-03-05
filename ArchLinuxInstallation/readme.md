@@ -31,7 +31,7 @@ This will turn the drive into one large linux partition. If your drive currently
 Write this partition to disk with the `w` command.  
 Exit out of fdisk with `q`.
 
-Creat your linux file system (ext4):  
+Create your linux file system (ext4):  
 `sudo mkfs.ext4 /dev/sda1`  
 '/dev/sda1' is the name of the partition you've just created. **Be very careful** while partitioning and writing file systems. If you pick the wrong drive or partition, you could lose whatever was on the drive.
 
@@ -385,8 +385,9 @@ return {
 ### Setting up Qtile:
 
 This is my first time using Qtile and I have to admit, it's freaking awesome!  
-I've Added the config.py as a separate file because it's quite large. I've also added a screenshot of what my config looks like in case you're interested in the old, "bibbity bobbity, your dotfiles are now my property."  
-There's simply too much in the config to walk through it all here but I've made a bunch of comments in the config and it's pretty readable. Take a look through it and change what makes sense for you.
+I've added the config.py as a separate file because it's quite large. I've also added a screenshot of what my config looks like in case you're interested in the old, "bibbity bobbity, your dotfiles are now my property."  
+There's simply too much in the config to walk through it all here but I've made a bunch of comments in the config and it's pretty readable. Take a look through it and change what makes sense for you.  
+**For this config to work** you will need to use an AUR helper to download qtile_extras. I use [yay](https://itsfoss.com/install-yay-arch-linux/).
 
 Tips Tricks:
 
@@ -426,6 +427,34 @@ I've added a markdown file called github_setup.md that helps with setting up Git
 
 ---
 
+### Picom config
+
+Pretty basic here, but to set your transparency, corner rounding of windows, etc. play with this config:  
+As the file stands it is what I'm using for a little bit of transparency and a rounding corners of windows.
+
+[picom.conf]()
+
+### Theming Applications
+
+Not a fan of flash bombing yourself when you open up an application which doesn't have a dark mode built into it? Fellow cave dwellers rejoice! We can add our own dark themes to the system with lxappearance for GTK applications and qt5ce for Qt applications.  
+If you've changed your theme in the past and don't understand why it only applies to some applications, it's because some applications handle theming with GTK and others with Qt. By using these two tools you can set a universal theme for all of your applications.
+
+`sudo pacman -S lxappearance`
+Theme pack for GTK:
+`sudo pacman -S materia-gtk-theme`
+I use Adwaita-dark
+
+`sudo pacman -S qt5ce`
+I don't need anything fancy here, just open qt5ce after changing the below `/ext/environment` file, and toggle "Custom," Color scheme: "darker."
+
+- You'll need to add the line: `QT_QPA_PLATFORMTHEME=qt5ct` to your `/etc/environment` file. This will make your Qt theme redirect to qt5ct.
+
+Now any application you run, whether it's GTK or Qt, will have the darker theme. Your eyes thank you!
+
+### Additional packages
+
+There are a few more packages you may or may not want in the `base_packages.pacman` file, These including things like a torrent client, rofi for launching applications, and more. Have a look at the file before using it to install your base packages and change anything you don't want/need to your preferences.
+
 ### The End! Kinda...
 
 PHEW! We did it! We're back and better than ever!
@@ -435,7 +464,7 @@ I'd call this a base install. Now all that's left to do is add the [black arch](
 ![Qtile Bar](https://github.com/Xerips/ArchLinux/blob/main/ArchLinuxInstallation/qtile-bar.png)
 ![Nvim + Tmux](https://github.com/Xerips/ArchLinux/blob/main/ArchLinuxInstallation/tmux-nvim.png)
 
-If you've taken a look at my BHP repo, you'll have seen that I go through an entire book dedicated on how to compromise a system that you have basic access to with python scripts. The reason why this book is so handy is because when you've gotten a foothold on a system, you may not have access to the tools that will allow you to easily escalate your permissions, exfil data, and a number of other nafarious tasks hackers may be interested in. It would be pretty silly of us to install all of the tools hackers may want/need on our base system. If we do this, it's effectively like handing over the keys to the castle to anyone who can get a foothold. Soooo, let's not! Instead, let's create a "Dirty Twin" of our snazzy new Arch installation in a virtual machine which we can load up with all of the pen-testing and experimental tools we could possibly want.  
+If you've taken a look at my Black Hat Python repo, you'll have seen that I go through an entire book dedicated on how to compromise a system that you have basic access to with python scripts. The reason why this book is so handy is because when you've gotten a foothold on a system, you may not have access to the tools that will allow you to easily escalate your permissions, exfil data, and a number of other nafarious tasks hackers may be interested in. It would be pretty silly of us to install all of the tools hackers may want/need on our base system. If we do this, it's effectively like handing over the keys to the castle to anyone who can get a foothold. Soooo, let's not! Instead, let's create a "Dirty Twin" of our snazzy new Arch installation in a virtual machine which we can load up with all of the pen-testing and experimental tools we could possibly want.  
 By doing this we can keep our main system clean, stabled, and safe. We avoid experimental packages that may break our system, tools that hackers could use against up, and have free reign to do whatever we want! If we toast the VM, we can just spin up another one from a snapshot.
 
 With that, I think we're done with this section on setting up a new Arch system. I hope your system lives long and prospers! I'll catch you in the next section "Dirty Twin"!

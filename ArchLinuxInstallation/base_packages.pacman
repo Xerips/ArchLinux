@@ -12,6 +12,7 @@ feh
 firefox
 flameshot
 fzf
+gimp
 git
 gparted
 grsync
@@ -20,6 +21,7 @@ htop
 intel-media-driver
 iptables-nft
 iwd
+kvantum
 libpulse
 libva-intel-driver
 libva-mesa-driver
@@ -28,6 +30,8 @@ lightdm-gtk-greeter
 lightdm-slick-greeter
 linux
 linux-firmware
+lxappearance
+materia-gtk-theme
 nano
 neofetch
 neovim
@@ -55,7 +59,9 @@ pipewire-pulse
 polkit-gnome
 python-pip
 python-psutil
+qbittorrent
 qemu-base
+qt5ct
 qtile
 qtile-extras-git
 rofi
@@ -134,6 +140,5 @@ xorg-server
 xorg-server-xephyr
 xorg-xinit
 yay
-yay-debug
 zram-generator
 zsh

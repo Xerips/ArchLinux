@@ -2,7 +2,7 @@
 
 ## Table of contents
 
-### [Arch Linux](https://github.com/Xerips/ArchLinux/tree/main/ArchLinuxInstallation)
+### [Arch Linux Installation](https://github.com/Xerips/ArchLinux/tree/main/ArchLinuxInstallation)
 
 In this directory you will find my Arch linux build that is focused on a clean and efficient work flow with an eye to system recovery.
 

@@ -8,8 +8,11 @@ In this directory you will find my Arch linux build that is focused on a clean a
 
 ### [Defence!](https://github.com/Xerips/ArchLinux/tree/main/Defence!)
 
-Here we look at building and configuring some defensive applications.  
-\*\*Under Construction: Check back later!
+Here we look at building and configuring some defensive applications.
+
+#### [Wazuh](https://github.com/Xerips/ArchLinux/tree/main/Defence!/Wazuh) - Open Source Security Platform providing unified XDR and SIEM protection for endpoints and cloud workloads.
+
+\*\*Under Construction: Check back later to see more content!
 
 ### [Dirty Twin](https://github.com/Xerips/ArchLinux/tree/main/DirtyTwin)
 

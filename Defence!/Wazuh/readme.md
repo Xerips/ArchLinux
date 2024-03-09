@@ -63,7 +63,7 @@ When we start looking through the documentation we see that there are 4 componen
 - Filebeat is used to securely forward Wazuh alerts and archived events to the Wazuh indexer using TLS encryption.
 
 Here's a diagram:
-![Wazuh Architecture]()
+![Wazuh Architecture](https://github.com/Xerips/ArchLinux/blob/main/Defence!/Wazuh/deployment-architecture1.png)
 
 **Wazuh Agent-Server Communication:**
 
@@ -215,15 +215,14 @@ The Wazuh documentation is pretty easy to follow. We will just need to follow th
 1. Input your Wazuh servers IP address.
 1. Determine the functionality of your agent:
 
+   - Select y or press enter if you want to run an integrity check daemon.
+   - Select y or press enter if you want to run a rootkit detection engine.
+   - Select y or press enter if you want to enable active response.
+   - Select y if you want to add more certificates (default is no).
+   - If you want to monitor any other file, just change the ossec.conf and add a new localfile entry. Any questions about the configuration can be answered by visiting us online at https://documentation.wazuh.com/.
 
-    - Select y or press enter if you want to run an integrity check daemon.
-    - Select y or press enter if you want to run a rootkit detection engine.
-    - Select y or press enter if you want to enable active response.
-    - Select y if you want to add more certificates (default is no).
-    - If you want to monitor any other file, just change the ossec.conf and add a new localfile entry. Any questions about the configuration can be answered by visiting us online at https://documentation.wazuh.com/.
-
-5. Press enter and watch'er go!
-6. The final print out from the installation:
+1. Press enter and watch'er go!
+1. The final print out from the installation:
 
 ```
 Done building agent
@@ -261,3 +260,6 @@ Adding additional agents is really easy if you're running windows, a linux distr
 Just go to the wazuh drop down, select agents, then deploy new agent. It will give you copy and paste commands to add the agents, super quick and easy.
 
 ### Kicking The Tires
+
+Run as APP instead of Firefox full application.
+Ensure autostart of all components.

@@ -99,31 +99,33 @@ Here's a diagram:
 - Both alerts and non alerts are stored in files on the Wazuh server and can be stored in either `.json` or in plain text `.log` files.
 - These files are compressed daily and signed using MD5, SHA1, and SHA256 checksums.
 - See the directory and filename structure with: `root@wazuh-manager:/var/ossec/logs/archives/2024/Jan$ ls -la`
-- This will return:
-  `total 176
--rw-r----- 1 wazuh wazuh 234350 Jan  2 00:00 ossec-archive-01.json.gz
--rw-r----- 1 wazuh wazuh    350 Jan  2 00:00 ossec-archive-01.json.sum
--rw-r----- 1 wazuh wazuh 176221 Jan  2 00:00 ossec-archive-01.log.gz
--rw-r----- 1 wazuh wazuh    346 Jan  2 00:00 ossec-archive-01.log.sum
--rw-r----- 1 wazuh wazuh 224320 Jan  2 00:00 ossec-archive-02.json.gz
--rw-r----- 1 wazuh wazuh    350 Jan  2 00:00 ossec-archive-02.json.sum
--rw-r----- 1 wazuh wazuh 151642 Jan  2 00:00 ossec-archive-02.log.gz
--rw-r----- 1 wazuh wazuh    346 Jan  2 00:00 ossec-archive-02.log.sum
--rw-r----- 1 wazuh wazuh 315251 Jan  2 00:00 ossec-archive-03.json.gz
--rw-r----- 1 wazuh wazuh    350 Jan  2 00:00 ossec-archive-03.json.sum
--rw-r----- 1 wazuh wazuh 156296 Jan  2 00:00 ossec-archive-03.log.gz
+- This will return:  
+   `total 176  
+-rw-r----- 1 wazuh wazuh 234350 Jan  2 00:00 ossec-archive-01.json.gz  
+-rw-r----- 1 wazuh wazuh    350 Jan  2 00:00 ossec-archive-01.json.sum  
+-rw-r----- 1 wazuh wazuh 176221 Jan  2 00:00 ossec-archive-01.log.gz  
+-rw-r----- 1 wazuh wazuh    346 Jan  2 00:00 ossec-archive-01.log.sum  
+-rw-r----- 1 wazuh wazuh 224320 Jan  2 00:00 ossec-archive-02.json.gz  
+-rw-r----- 1 wazuh wazuh    350 Jan  2 00:00 ossec-archive-02.json.sum  
+-rw-r----- 1 wazuh wazuh 151642 Jan  2 00:00 ossec-archive-02.log.gz  
+-rw-r----- 1 wazuh wazuh    346 Jan  2 00:00 ossec-archive-02.log.sum  
+-rw-r----- 1 wazuh wazuh 315251 Jan  2 00:00 ossec-archive-03.json.gz  
+-rw-r----- 1 wazuh wazuh    350 Jan  2 00:00 ossec-archive-03.json.sum  
+-rw-r----- 1 wazuh wazuh 156296 Jan  2 00:00 ossec-archive-03.log.gz  
 -rw-r----- 1 wazuh wazuh    346 Jan  2 00:00 ossec-archive-03.log.sum`
+
 - Wazuh recommends backups according to the storage capacity of the Wazuh server.
 - Wazuh suggest using cron jobs to only keep a specified window of backups (3 months, 6 months, a year, depending on storage limitations)
 - Last note: "you may choose to dispense with storing archive files and simply rely on the Wazuh indexer for archive storage. This alternative might be preferred if you run periodic Wazuh indexer snapshot backups and/or have a multi-node Wazuh indexer cluster with shard replicas for high availability. You could even use a cron job to move snapshotted indices to a final data storage server and sign them using MD5, SHA1, and SHA256 hashing algorithms."
 
-**Use Cases**
-This is a nice addition to the documentation. [Here](https://documentation.wazuh.com/current/getting-started/use-cases/index.html) you can look through the different use cases for Wazuh which will help with configuring the SIEM to your needs and specifications. We will use this in "Set'er up!" to get what we need out of it.
-|Endpoint Security|Threat Intelligence|Security Operations|Cloud Security|
-|---|---|---|---|
-|[Configuration Assessment](https://documentation.wazuh.com/current/getting-started/use-cases/configuration-assessment.html)|[Threat Hunting](https://documentation.wazuh.com/current/getting-started/use-cases/threat-hunting.html)|[Incident Response](https://documentation.wazuh.com/current/getting-started/use-cases/incident-response.html)|[Container Security](https://documentation.wazuh.com/current/getting-started/use-cases/container-security.html)|
-|[Malware Detection](https://documentation.wazuh.com/current/getting-started/use-cases/malware-detection.html)|[Log Data Analysis](https://documentation.wazuh.com/current/getting-started/use-cases/log-analysis.html)|[Regulatory Compliance](https://documentation.wazuh.com/current/getting-started/use-cases/regulatory-compliance.html)|[Posture Management](https://documentation.wazuh.com/current/getting-started/use-cases/posture-management.html)|
-|[File Integrity Monitoring](https://documentation.wazuh.com/current/getting-started/use-cases/file-integrity.html)|[Vulnerability Detection](https://documentation.wazuh.com/current/getting-started/use-cases/vulnerability-detection.html)|[IT Hygiene](https://documentation.wazuh.com/current/getting-started/use-cases/it-hygiene.html)|[Workload Protection](https://documentation.wazuh.com/current/getting-started/use-cases/cloud-workload-protection.html)|
+**Use Cases**  
+This is a nice addition to the documentation, click any of the use cases in the table below to navigate to the specified documentation.
+
+| Endpoint Security                                                                                                           | Threat Intelligence                                                                                                       | Security Operations                                                                                                   | Cloud Security                                                                                                          |
+| --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| [Configuration Assessment](https://documentation.wazuh.com/current/getting-started/use-cases/configuration-assessment.html) | [Threat Hunting](https://documentation.wazuh.com/current/getting-started/use-cases/threat-hunting.html)                   | [Incident Response](https://documentation.wazuh.com/current/getting-started/use-cases/incident-response.html)         | [Container Security](https://documentation.wazuh.com/current/getting-started/use-cases/container-security.html)         |
+| [Malware Detection](https://documentation.wazuh.com/current/getting-started/use-cases/malware-detection.html)               | [Log Data Analysis](https://documentation.wazuh.com/current/getting-started/use-cases/log-analysis.html)                  | [Regulatory Compliance](https://documentation.wazuh.com/current/getting-started/use-cases/regulatory-compliance.html) | [Posture Management](https://documentation.wazuh.com/current/getting-started/use-cases/posture-management.html)         |
+| [File Integrity Monitoring](https://documentation.wazuh.com/current/getting-started/use-cases/file-integrity.html)          | [Vulnerability Detection](https://documentation.wazuh.com/current/getting-started/use-cases/vulnerability-detection.html) | [IT Hygiene](https://documentation.wazuh.com/current/getting-started/use-cases/it-hygiene.html)                       | [Workload Protection](https://documentation.wazuh.com/current/getting-started/use-cases/cloud-workload-protection.html) |
 
 ### Set'er up!
 

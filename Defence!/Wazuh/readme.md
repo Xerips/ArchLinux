@@ -142,6 +142,122 @@ Hardware Requirements Based on Deploying Wazuh Server, Indexer, and Dashboard on
 
 **Browser Compatibility:** Chrome 95 or later, Firefox 93 or later, Safari 13.7 or later. Other Chromium-based browsers might also work.
 
-**Installation:**
+#### Installation:
+
+Here we will walk through setting up Qemu to install our Ubuntu server, a general
+**Qemu setup:**
+
+1. Launch virt-manager and click the "Create a new virtual machine" icon in the top left.
+2. Toggle "Local install media (ISO image or CDROM)" and click "Forward".
+3. Browse to where you downloaded the ubuntu server .iso, select it, and click "Choose Volume."
+4. Click "Forward" again once virt-manager shows you the iso you've selected.
+5. For memory we follow the recommendations of 8 GiB converted to 8192 MiB and 4 vCPUs.
+6. Select 50GB storage (GiB (46.57) and GB (50) are pretty close, just enter 50).
+7. We name our machine Wazuh, and toggle "Customize configuration before install"
+
+- This opens up a menu that should look familiar if you've used other hypervisors before.
+
+8. We want to change the CPUs Topology in "CPUs" by toggling "Manually set CPU topology" then setting Sockets: 1, Cores: 4, Threads: 1 (or 2).
+9. Everything looked like it was set up properly by default (besides that weird topology), so we can click the begin installation button.
+10. If you wanted to run this server every time you log in you can by going to "View" > "Boot Options" > toggle "Start Virtual Machine on host boot up"
+
+**Install Ubuntu Server:**
+
+1. Hop through the install prompts, I decided to go with the regular ubuntu server, not the ubuntu server minimized. I did a quick google and it looks like minimized doesn't install any text editors or other tools that might be necessary to set things up, so we will just go with the standard.
+2. I've just gone with default settings, use all disk space, install OpenSSH (Don't have the keys pre-setup but we need OpenSSH), yadda yadda...
+3. You can look through the "Featured Server Snaps" to see if anything looks interesting, we are just using wazuh on the server, so we shouldn't need any of these options.
+4. Virt-manager can't automatically unmount the installation ISO with the machine running, so after everything is done installing, we have to reboot, then force shutdown, then click the lightbulb at the top of the virtual machine window that was running our installation. Check that your SATA CDROM1 (or wherever you're iso was mounted) has "no media selected" for "Source path:". For me, it unmounted the ISO after the force shutdown, but if it doesn't just unmount it before restarting.
+5. Restart the server and it should boot right up. Once it's started we can SSH into the server from our host machine.
+
+- From the server enter `ip a` to see the IP of the server
+- From your host machine, enter `ssh <server IP>` and use the user password that you set up in install to login.
+- You're now logged in as the user you created during the server install process.
+
+6. From here we're ready to install Wazuh!
+
+**Install Wazuh Server, Dashboard and Indexer:**
+The Wazuh documentation is pretty easy to follow. We will just need to follow the [Quickstart](https://documentation.wazuh.com/current/quickstart.html) guide to get us up and running.
+
+1. Download and Install the Wazuh installation assistant from your ssh session with the Ubuntu server.
+
+- `curl -sO https://packages.wazuh.com/4.7/wazuh-install.sh && sudo bash ./wazuh-install.sh -a`
+- It's good to note that this command would be extremely sketchy if you were to use it to install something from an unknown or unproven source. It's essentially downloading a file that's hosted on the web, and then piping it to bash and executing the script. You should always inspect your sources and check the contents of the scripts you're running. Blindly running a command like this could result in a, "I can't believe they actually did it..." for malicious actors and is a very efficient way to infect yourself with malware.
+- You should be seeing the installation progress after running the above command.
+- At the very end of the installation, the script will print out your new username as `User: admin` and the password for your dashboard with `Password: <password string here>`
+- Save your password in a safe place.
+
+2. Check out the dashboard:
+
+- From a browser on your host machine, enter: `https://<server IP>`
+- You will get a warning about certificates, but we know what we're accessing (we're hosting it after all), so we continue to the dashboard.
+- You'll notice there is no option for an Arch Linux install using "add agent" button. You'll have to find the documentation for installation on their documentation page, ["Installing The Wazuh agent from sources"](https://documentation.wazuh.com/current/deployment-options/wazuh-from-sources/wazuh-agent/index.html)
+  **Installing a Wazuh agent on Arch Linux:**
+
+1. Install the recommended packages, a lot of these we already have installed, but that's ok:
+
+- `sudo pacman --noconfirm -Syu curl gcc make sudo wget expect gnupg perl-base perl fakeroot python brotli automake autoconf libtool gawk libsigsegv nodejs base-devel inetutils cmake`
+- You shouldn't normally run `sudo pacman --noconfirm`, as this removes all the "are you sure?" prompts from the package manager. I'm not sure why they have it listed in their documents to do so.
+
+2. Download and extract the latest version:
+
+- `curl -Ls https://github.com/wazuh/wazuh/archive/v4.7.3.tar.gz | tar zx`
+- Run this command from the directory you want to install the latest version in. ex: `/home/$(whoami)/Wazuh.`
+
+3. CD into the directory you just pulled down and run the install.sh file:
+
+- `sudo ./install.sh`
+
+4. Follow the prompts of the install script:
+1. `en` for english.
+1. Press ENTER to continue.
+1. `agent` because we want to install an agent.
+1. Where you want to install the agent, default is /var/ossec.
+1. Input your Wazuh servers IP address.
+1. Determine the functionality of your agent:
+
+
+    - Select y or press enter if you want to run an integrity check daemon.
+    - Select y or press enter if you want to run a rootkit detection engine.
+    - Select y or press enter if you want to enable active response.
+    - Select y if you want to add more certificates (default is no).
+    - If you want to monitor any other file, just change the ossec.conf and add a new localfile entry. Any questions about the configuration can be answered by visiting us online at https://documentation.wazuh.com/.
+
+5. Press enter and watch'er go!
+6. The final print out from the installation:
+
+```
+Done building agent
+
+Wait for success...
+success
+Removing old SCA policies...
+Installing SCA policies...
+
+
+egrep: warning: egrep is obsolescent; using grep -E
+Created symlink /etc/systemd/system/multi-user.target.wants/wazuh-agent.service → /etc/systemd/system/wazuh-agent.service.
+
+ - Configuration finished properly.
+
+ - To start Wazuh:
+      /var/ossec/bin/wazuh-control start
+
+ - To stop Wazuh:
+      /var/ossec/bin/wazuh-control stop
+
+ - The configuration can be viewed or modified at /var/ossec/etc/ossec.conf
+```
+
+This print out is a little misleading. To start the agent you need to enter the following in your terminal:  
+`sudo systemctl daemon-reload`  
+`sudo systemctl enable wazuh-agent.service`  
+`sudo systemctl start wazuh-agent.service`  
+This will start the agent as a service so it will persist after you reboot.
+
+If you reload your browser the Wazuh Dashboard, you should see your total agents are now 1.  
+You can also check if your wazuh-manager.service is running on your server. Connect through ssh and enter `sudo systemctl wazuh-manager.service`. It should say `Active: active (running)`
+
+Adding additional agents is really easy if you're running windows, a linux distro using apt or rpm, or macOS.
+Just go to the wazuh drop down, select agents, then deploy new agent. It will give you copy and paste commands to add the agents, super quick and easy.
 
 ### Kicking The Tires

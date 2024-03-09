@@ -408,7 +408,7 @@ Tips Tricks:
 - In reality, there are definitely reasons to use VirtualBox too. The biggest reasons to use VirtualBox are it's easy to use and a lot of content out there is optimized to work on it. Some things that don't work properly out of the box on Qemu might work better on Virtualbox or visa-versa.
 
 Install:  
-`sudo pacman -Syy qemu virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat ebtables iptables-nft`
+`sudo pacman -Syy qemu virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat ebtables iptables-nft libguestfs`
 
 Start KVM libvirt service:  
 `sudo systemctl enable libvirtd.service`
@@ -417,7 +417,28 @@ Start KVM libvirt service:
 Check the service is running:  
 `systemctl status libvirtd.service`
 
+You can play with permissions and other configuration settings (like TLS) in `/etc/libvirt/libvirtd.conf`.
+There are 3 things you may want to change right away to get around having to use a polkit agent:
+
+- uncomment line 85: `unix_sock_group = "libvrit"`
+- uncomment line 95: `unix_sock_ro_perms = "0777"`
+- uncomment line 108: `unix_sock_rw_perms = "0770"`
+- There are descriptions above the lines that provide more info on why you may want to change the permissions to be tighter or more loose.
+- Whether you change this to avoid going through your polkit agent or not, a polkit agent is still useful to have.
+- This can be helpful later on if you're wanting to start your Wazuh server on boot.
+
+Add Libvirt group for your user:
+`sudo usermod -a -G libvirt $(whoami)`
+`newgrp libvirt`
+
+You'll need to start virsh (a libvirt command line utility) by default to enable NAT forwarding with Qemu/Virt-Manager:  
+Check if it's started: `sudo virsh net-list --all`
+If "inactive", start with: `sudo virsh net-start default`
+You'll be able to see it in the virt-manager menu now by going to "Edit" > Connection Details > Virtual Networks. It should say "Active" under "State:"
+
 That's it! You're ready to launch `virt-manager` and to start installing some test vm's or juicy boxes from [vulhub](https://www.vulnhub.com/) to pwn!
+
+**Tip:** Don't give your virtual machines more than half of your vCPU cores. If you give them too many you will definitely experience problems.
 
 ---
 

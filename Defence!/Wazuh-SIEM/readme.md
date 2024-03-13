@@ -3,7 +3,7 @@
 ### Table of Contents
 
 - [Why Wazuh?](https://github.com/Xerips/ArchLinux/tree/main/Defence!/Wazuh-SIEM#why-wazuh)
-- [Documentation Review](https://github.com/Xerips/ArchLinux/tree/main/Defence!/Wazuh-SIEM#documentation-review)
+- [Documentation Review](https://github.com/Xerips/ArchLinux/tree/main/Defence!/Wazuh-SIEM#documentation-review-getting-started)
 - [Set'er up!](https://github.com/Xerips/ArchLinux/tree/main/Defence!/Wazuh-SIEM#seter-up)
 - [Kicking The Tires](https://github.com/Xerips/ArchLinux/tree/main/Defence!/Wazuh-SIEM#kicking-the-tires)
 

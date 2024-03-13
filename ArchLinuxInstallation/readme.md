@@ -434,6 +434,7 @@ Add Libvirt group for your user:
 You'll need to start virsh (a libvirt command line utility) by default to enable NAT forwarding with Qemu/Virt-Manager:  
 Check if it's started: `sudo virsh net-list --all`
 If "inactive", start with: `sudo virsh net-start default`
+If you want the virtual network to start automatically: `sudo virsh net-autostart default`
 You'll be able to see it in the virt-manager menu now by going to "Edit" > Connection Details > Virtual Networks. It should say "Active" under "State:"
 
 That's it! You're ready to launch `virt-manager` and to start installing some test vm's or juicy boxes from [vulhub](https://www.vulnhub.com/) to pwn!

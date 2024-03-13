@@ -149,6 +149,8 @@ Hardware Requirements Based on Deploying Wazuh Server, Indexer, and Dashboard on
 Here we will walk through setting up Qemu to install our Ubuntu server, a general
 **Qemu setup:**
 
+If you're planning on running multiple servers, or want a "base server install" to be able to reinstall wazuh on a fresh server, do the installation as "Ubuntu-22.04-Server" (or whatever name makes sense to you), then clone the server to make a fresh install of the wazuh server, indexer, and dashboard.
+
 1. Launch virt-manager and click the "Create a new virtual machine" icon in the top left.
 2. Toggle "Local install media (ISO image or CDROM)" and click "Forward".
 3. Browse to where you downloaded the ubuntu server .iso, select it, and click "Choose Volume."
@@ -166,16 +168,34 @@ Here we will walk through setting up Qemu to install our Ubuntu server, a genera
 **Install Ubuntu Server:**
 
 1. Hop through the install prompts, I decided to go with the regular ubuntu server, not the ubuntu server minimized. I did a quick google and it looks like minimized doesn't install any text editors or other tools that might be necessary to set things up, so we will just go with the standard.
-2. I've just gone with default settings, use all disk space, install OpenSSH (Don't have the keys pre-setup but we need OpenSSH), yadda yadda...
-3. You can look through the "Featured Server Snaps" to see if anything looks interesting, we are just using wazuh on the server, so we shouldn't need any of these options.
-4. Virt-manager can't automatically unmount the installation ISO with the machine running, so after everything is done installing, we have to reboot, then force shutdown, then click the lightbulb at the top of the virtual machine window that was running our installation. Check that your SATA CDROM1 (or wherever you're iso was mounted) has "no media selected" for "Source path:". For me, it unmounted the ISO after the force shutdown, but if it doesn't just unmount it before restarting.
-5. Restart the server and it should boot right up. Once it's started we can SSH into the server from our host machine.
+2. When you get to "Guided Storage Configuration" select `( ) Custom storage layout`
+3. Create a boot partition:
+
+   - Select "free space" under AVAILABLE DEVICES, Select "Add GPT Partition", Size: `512M`, Format: `Leave unformatted`
+
+4. Create a swap partition:
+
+   - Select "free Space", "Add GPT Partition", Size: 8192M", Format: "swap"
+
+5. Create root partition:
+
+   - Select "free space", "Add GPT Partition", Size: <leave blank for use entire disk>", format: "ext4"
+
+- I've decided to go with one large partition because I'm not exactly sure how much space is going to be used up in /var, /opt, /home, etc.
+- This option lets us run, configure, and install anything we need on our ubuntu server without having to worry about running out of space in a partition we underestimate.
+
+3. Skip for now on Upgrade to Ubuntu Pro.
+4. (X) Install OpenSSH server
+5. You can look through the "Featured Server Snaps" to see if anything looks interesting, we are just using wazuh on the server, so we shouldn't need any of these options.
+6. If you get errors after selecting "Reboot now," just ctrl+c and it should be able to reboot (it will unmount the installation media).
 
 - From the server enter `ip a` to see the IP of the server
 - From your host machine, enter `ssh <server IP>` and use the user password that you set up in install to login.
 - You're now logged in as the user you created during the server install process.
 
-6. From here we're ready to install Wazuh!
+7. From here we're ready to install Wazuh!
+
+- If you're going the clone route (recommended), clone your "Ubuntu-22.04-Server" to "Wazuh-FreshInstall" by right clicking on the ubuntu server in virt-manager.
 
 **Install Wazuh Server, Dashboard and Indexer:**
 The Wazuh documentation is pretty easy to follow. We will just need to follow the [Quickstart](https://documentation.wazuh.com/current/quickstart.html) guide to get us up and running.
@@ -263,5 +283,42 @@ Just go to the wazuh drop down, select agents, then deploy new agent. It will gi
 
 ### Kicking The Tires
 
-Run as APP instead of Firefox full application.
-Ensure autostart of all components.
+It's time to see how good/bad our basic Arch Linux install is!  
+Here's a look at our new dashboard:  
+![Wazuh Dashboard]()  
+Let's start move to our agents dashboard to see our active agent. You can do this by clicking on the "1" under "Total agents" or "Active agents," otherwise, you can click the downward arrow beside "wazuh." at the top of the dashboard and select "Agents."  
+This will bring up the following dashboard:  
+![Agents Dashboard]()  
+In this dashboard we will be able to see all of our agents, and can click on them to drill deeper into what's going on and what the wazuh scans have returned.  
+Click on the arch agent as the red arrow in the picture indicates to visit the specific agent's dashboard.  
+![Arch Agent Dashboard]()  
+I've highlighted some of the boxes to point out some cool features.
+
+- The **Orange box** shows MITRE ATT&CK results which leverages the MITRE ATT&CK knowledge base of adversary tactics and techniques that you're system could be vulnerable to. This is a super easy way to quickly visualize issues that may interfere with effective cybersecurity.
+- The **Red box** is useful for those who need to comply with specific standards like Payment Card Industry Data Security Standard (PCI DSS) or NIST 800-53 which is the National Institute of Standards and Technology's Security and Privacy Controls for Information Systems and Organizations. I know it's a mouth full. Imagine how much easier it would be to comply to these standards by having your SIEM do a scan and let you know what you need to get in compliance than to otherwise have to step through the (very) lengthy documentation and compare those standards to your system configurations. If you need to be in compliance to any of these standards, it's definitely important to be intimately familiar with them, but if you're just starting out what a great way to get familiar!
+- The **Purple box** shows FIM: Recent events. This is our file integrity monitoring window. This box will show any alerts that are triggered when the Wazuh agent scans the directory paths it's been configured to look through for any file changes. It will look for file modifications by comparing the checksums of a file to it's stored checksums and attribute values, then generates an alert if it finds any discrepancies.
+- The **Cyan box** Is the Security Configuration Assessment. Let's click on the "System audit for Unix based systems" and see why we only got a score of 14%.
+  ![SCA-Arch Scan]()
+- I've clicked on the first failed scan which is titled "SSH Hardening: Port should not be 22." This one is a bit of a weak alert, seeing as changing the SSH port to something non-default would be considered "Security through Obscurity" which is commonly said to be "No security at all." Wazuh does however provide a "Rationale" to communicate why the suggestion to change the port number was given. They also tell you in "Remediation" where to make the changes to pass the test, a "Description" of what's going on, which seems to be almost an extension of "Remediation," and under "Compliance" it shows where it has gotten these check rules from (NIST_800_53: CM.1 and PCI_DSS: 2.2.4).
+- This makes it super easy to make changes to get into compliance, understand why the compliance standard is in place, and where to look for more information.
+- Let's step through the failed tests and see if we can get our system on the right track!
+
+- We can go to our ssh configs with, `cd /etc/ssh/` and take a look at our sshd_config.
+- Now we can uncomment lines and change the values for system wide changes. Doing the SSH config this way will ensure any users that are added to our arch linux machine will have the same settings.
+- When we open the sshd_config file with nvim, there is some handy information right at the top, thanks OpenSSH!:
+
+```
+# The strategy used for options in the default sshd_config shipped with
+# OpenSSH is to specify options with their default value where
+# possible, but leave them commented.  Uncommented options override the
+# default value.
+```
+
+- Looks like we're in the right place to do some system wide configuration.
+- We can use the `ss` command which shows socket statistics on linux machines.
+  - Get a list of all open ports with `ss -` and search who is responsible for opening a specific port with `ss -lp | grep <specific port>` - Finding out if a specific port is in use is valuable so we don't accidentally assign a port to ssh that is already in use.
+- Now we have the tools we need and the info on what to change, let's make some quick changes, restart the wazuh agent to re-scan our system, and see what happens to our System Audit score...
+  ![SCA Fixed]()
+- There we have it! Because of the easy to follow breakdown, with 2 config files, 1 terminal command, and a few minutes of changes we increased our System audit score from 14% to 92%. It should be 100%. I fixed the LoginGraceTime 120 failure but for some reason wazuh isn't picking up on it. This is something to look into, not something to ignore. There is a reason why that check failed, but it just wasn't obvious.
+
+There is so much more you can do with wazuh and a SIEM in general. It's hard to believe that a SIEM like this is so easy to use, open source, and completely free to do what we've done here! I'll be doing more with wazuh as I get into more fun stuff with our "Dirty Twin," and I'll definitely be setting up an agent on a windows machine to play around with that as well! Stay tuned nerds, the fun is just starting!

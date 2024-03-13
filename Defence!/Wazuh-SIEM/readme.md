@@ -288,13 +288,19 @@ Just go to the wazuh drop down, select agents, then deploy new agent. It will gi
 
 It's time to see how good/bad our basic Arch Linux install is!  
 Here's a look at our new dashboard:  
-![Wazuh Dashboard](https://github.com/Xerips/ArchLinux/blob/main/Defence!/Wazuh-SIEM/wazuh-dashboard.png)  
-Let's start move to our agents dashboard to see our active agent. You can do this by clicking on the "1" under "Total agents" or "Active agents," otherwise, you can click the downward arrow beside "wazuh." at the top of the dashboard and select "Agents."  
+![Wazuh Dashboard](https://github.com/Xerips/ArchLinux/blob/main/Defence!/Wazuh-SIEM/wazuh-dashboard.png)
+
+- Let's start move to our agents dashboard to see our active agent.
+- You can do this by clicking on the "1" under "Total agents" or "Active agents," otherwise, you can click the downward arrow beside "wazuh." at the top of the dashboard and select "Agents."
+
 This will bring up the following dashboard:  
-![Agents Dashboard](https://github.com/Xerips/ArchLinux/blob/main/Defence!/Wazuh-SIEM/agents-dashboard.png)  
-In this dashboard we will be able to see all of our agents, and can click on them to drill deeper into what's going on and what the wazuh scans have returned.  
-Click on the arch agent as the red arrow in the picture indicates to visit the specific agent's dashboard.  
-![Arch Agent Dashboard](https://github.com/Xerips/ArchLinux/blob/main/Defence!/Wazuh-SIEM/arch-agent-dashboard.png)  
+![Agents Dashboard](https://github.com/Xerips/ArchLinux/blob/main/Defence!/Wazuh-SIEM/agents-dashboard.png)
+
+- In this dashboard we will be able to see all of our agents, and can click on them to drill deeper into what's going on and what the wazuh scans have returned.
+
+Click on the arch agent as the red arrow in the picture indicates to visit the specific agent's dashboard:  
+![Arch Agent Dashboard](https://github.com/Xerips/ArchLinux/blob/main/Defence!/Wazuh-SIEM/arch-agent-dashboard.png)
+
 I've highlighted some of the boxes to point out some cool features.
 
 - The **Orange box** shows MITRE ATT&CK results which leverages the MITRE ATT&CK knowledge base of adversary tactics and techniques that you're system could be vulnerable to. This is a super easy way to quickly visualize issues that may interfere with effective cybersecurity.
@@ -302,31 +308,40 @@ I've highlighted some of the boxes to point out some cool features.
 - The **Purple box** shows FIM: Recent events. This is our file integrity monitoring window. This box will show any alerts that are triggered when the Wazuh agent scans the directory paths it's been configured to look through for any file changes. It will look for file modifications by comparing the checksums of a file to it's stored checksums and attribute values, then generates an alert if it finds any discrepancies.
 - The **Cyan box** Is the Security Configuration Assessment. Let's click on the "System audit for Unix based systems" and see why we only got a score of 14%.
 
-  ![SCA-Arch Scan](https://github.com/Xerips/ArchLinux/blob/main/Defence!/Wazuh-SIEM/SCA-arch.png)
+The arch agent's SCA dashboard:
+![SCA-Arch Scan](https://github.com/Xerips/ArchLinux/blob/main/Defence!/Wazuh-SIEM/SCA-arch.png)
 
-- I've clicked on the first failed scan which is titled "SSH Hardening: Port should not be 22." This one is a bit of a weak alert, seeing as changing the SSH port to something non-default would be considered "Security through Obscurity" which is commonly said to be "No security at all." Wazuh does however provide a "Rationale" to communicate why the suggestion to change the port number was given. They also tell you in "Remediation" where to make the changes to pass the test, a "Description" of what's going on, which seems to be almost an extension of "Remediation," and under "Compliance" it shows where it has gotten these check rules from (NIST_800_53: CM.1 and PCI_DSS: 2.2.4).
+- In the above image, I've clicked on the first failed scan which is titled "SSH Hardening: Port should not be 22."
+  - Wazuh provides a "Rationale" to communicate why the suggestion to change the port number was given.
+  - They also tell you in "Remediation" where to make the changes to pass the test, a "Description" of what's going on, which seems to be almost an extension of "Remediation," and under "Compliance" it shows where it has gotten these check rules from (NIST_800_53: CM.1 and PCI_DSS: 2.2.4).
 - This makes it super easy to make changes to get into compliance, understand why the compliance standard is in place, and where to look for more information.
 - Let's step through the failed tests and see if we can get our system on the right track!
 
-- We can go to our ssh configs with, `cd /etc/ssh/` and take a look at our sshd_config.
+- We can go to our ssh configs with, `cd /etc/ssh/` and take a look at our sshd_config as directed.
 - Now we can uncomment lines and change the values for system wide changes. Doing the SSH config this way will ensure any users that are added to our arch linux machine will have the same settings.
 - When we open the sshd_config file with nvim, there is some handy information right at the top, thanks OpenSSH!:
 
-```
+`
+
 # The strategy used for options in the default sshd_config shipped with
+
 # OpenSSH is to specify options with their default value where
-# possible, but leave them commented.  Uncommented options override the
+
+# possible, but leave them commented. Uncommented options override the
+
 # default value.
-```
+
+`
 
 - Looks like we're in the right place to do some system wide configuration.
 - We can use the `ss` command which shows socket statistics on linux machines.
-  - Get a list of all open ports with `ss -l` and search who is responsible for opening a specific port with `ss -lp | grep <specific port>` - Finding out if a specific port is in use is valuable so we don't accidentally assign a port to ssh that is already in use.
+  - Get a list of all listening ports with `ss -l` and search who is responsible for opening a specific port with `ss -lp | grep <specific port>`
+  - Finding out if a specific port is in use is valuable so we don't accidentally assign a port to ssh that is already in use.
 - Now we have the tools we need and the info on what to change, let's make some quick changes, restart the wazuh agent to re-scan our system, and see what happens to our System Audit score...
   ![SCA Fixed](https://github.com/Xerips/ArchLinux/blob/main/Defence!/Wazuh-SIEM/SCA-Fixed.png)
-- There we have it! Because of the easy to follow breakdown, with 2 config files, 1 terminal command, and a few minutes of changes we increased our System audit score from 14% to 92%. It should be 100%. I fixed the LoginGraceTime 120 failure but for some reason wazuh isn't picking up on it. This is something to look into, not something to ignore. There is a reason why that check failed, but it just wasn't obvious.
+- There we have it! Because of the easy to follow breakdown: with 2 config files, 1 terminal command, and a few minutes of changes we increased our System audit score from 14% to 92%. It should be 100%. I fixed the LoginGraceTime 120 failure but for some reason wazuh isn't picking up on it. This is something to look into, not something to ignore. There is a reason why that check failed, but it just wasn't obvious.
 - If we go back to our Arch menu, we can see we've generated some MITRE ATT&CK events when we restarted our agent. There's 6 because that's how many time I tried different combinations of the LoginGraceTime time variable and reloaded the agent to see if wazuh would pick up on it.
 
 ![Arch Agent Dashboard 2](https://github.com/Xerips/ArchLinux/blob/main/Defence!/Wazuh-SIEM/arch-agent-dashboard2.png)
 
-There is so much more you can do with wazuh and a SIEM in general. It's hard to believe that a SIEM like this is so easy to use, open source, and completely free to do what we've done here! I'll be doing more with wazuh as I get into more fun stuff with our "Dirty Twin," and I'll definitely be setting up an agent on a windows machine to play around with that as well! Stay tuned nerds, the fun is just starting!
+There is so much more you can do with wazuh and a SIEM in general. It's hard to believe that a SIEM like this is so easy to use, is open source, and is completely free to do what we've done here! I'll be doing more with wazuh as I get into more fun stuff with our "Dirty Twin," and I'll definitely be setting up an agent on a windows machine to play around with that as well! **Stay tuned nerds, the fun is just starting!**

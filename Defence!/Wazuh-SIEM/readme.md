@@ -290,7 +290,7 @@ It's time to see how good/bad our basic Arch Linux install is!
 Here's a look at our new dashboard:  
 ![Wazuh Dashboard](https://github.com/Xerips/ArchLinux/blob/main/Defence!/Wazuh-SIEM/wazuh-dashboard.png)
 
-- Let's start move to our agents dashboard to see our active agent.
+- Let's move to our agents dashboard to see our active agent.
 - You can do this by clicking on the "1" under "Total agents" or "Active agents," otherwise, you can click the downward arrow beside "wazuh." at the top of the dashboard and select "Agents."
 
 This will bring up the following dashboard:  
@@ -321,17 +321,12 @@ The arch agent's SCA dashboard:
 - Now we can uncomment lines and change the values for system wide changes. Doing the SSH config this way will ensure any users that are added to our arch linux machine will have the same settings.
 - When we open the sshd_config file with nvim, there is some handy information right at the top, thanks OpenSSH!:
 
-`
-
+```
 # The strategy used for options in the default sshd_config shipped with
-
 # OpenSSH is to specify options with their default value where
-
 # possible, but leave them commented. Uncommented options override the
-
 # default value.
-
-`
+```
 
 - Looks like we're in the right place to do some system wide configuration.
 - We can use the `ss` command which shows socket statistics on linux machines.

@@ -2,10 +2,10 @@
 
 ### Table of Contents
 
-- [Why Wazuh?](https://github.com/Xerips/ArchLinux/tree/main/Defence!/Wazuh#why-wazuh)
-- [Documentation Review](https://github.com/Xerips/ArchLinux/tree/main/Defence!/Wazuh#documentation-review)
-- [Set'er up!](https://github.com/Xerips/ArchLinux/tree/main/Defence!/Wazuh#seter-up)
-- [Kicking The Tires](https://github.com/Xerips/ArchLinux/tree/main/Defence!/Wazuh#kicking-the-tires)
+- [Why Wazuh?](https://github.com/Xerips/ArchLinux/tree/main/Defence!/Wazuh-SIEM#why-wazuh)
+- [Documentation Review](https://github.com/Xerips/ArchLinux/tree/main/Defence!/Wazuh-SIEM#documentation-review)
+- [Set'er up!](https://github.com/Xerips/ArchLinux/tree/main/Defence!/Wazuh-SIEM#seter-up)
+- [Kicking The Tires](https://github.com/Xerips/ArchLinux/tree/main/Defence!/Wazuh-SIEM#kicking-the-tires)
 
 ### Why Wazuh?
 
@@ -62,8 +62,8 @@ When we start looking through the documentation we see that there are 4 componen
 - Production environments should deploy Wazuh server and Wazuh indexer to different hosts. This makes sense. You would want your server to be set up with the resources required to handle the traffic being sent to it. It's easier to do this reliably if you're setting up a host to handle this anticipated load, and nothing else. The Indexer needs things that the server doesn't, in particular storage. You'd hate to bog down your server with a bunch of read/write tasks while it's trying to handle incoming data from a large network of agents.
 - Filebeat is used to securely forward Wazuh alerts and archived events to the Wazuh indexer using TLS encryption.
 
-Here's a diagram:
-![Wazuh Architecture](https://github.com/Xerips/ArchLinux/blob/main/Defence!/Wazuh/deployment-architecture1.png)
+Here's a diagram:  
+![Wazuh Architecture](https://github.com/Xerips/ArchLinux/blob/main/Defence!/Wazuh-SIEM/deployment-architecture1.png)
 
 **Wazuh Agent-Server Communication:**
 
@@ -100,19 +100,19 @@ Here's a diagram:
 - These files are compressed daily and signed using MD5, SHA1, and SHA256 checksums.
 - See the directory and filename structure with: `root@wazuh-manager:/var/ossec/logs/archives/2024/Jan$ ls -la`
 - This will return:  
-   `total 176  
--rw-r----- 1 wazuh wazuh 234350 Jan  2 00:00 ossec-archive-01.json.gz  
--rw-r----- 1 wazuh wazuh    350 Jan  2 00:00 ossec-archive-01.json.sum  
--rw-r----- 1 wazuh wazuh 176221 Jan  2 00:00 ossec-archive-01.log.gz  
--rw-r----- 1 wazuh wazuh    346 Jan  2 00:00 ossec-archive-01.log.sum  
--rw-r----- 1 wazuh wazuh 224320 Jan  2 00:00 ossec-archive-02.json.gz  
--rw-r----- 1 wazuh wazuh    350 Jan  2 00:00 ossec-archive-02.json.sum  
--rw-r----- 1 wazuh wazuh 151642 Jan  2 00:00 ossec-archive-02.log.gz  
--rw-r----- 1 wazuh wazuh    346 Jan  2 00:00 ossec-archive-02.log.sum  
--rw-r----- 1 wazuh wazuh 315251 Jan  2 00:00 ossec-archive-03.json.gz  
--rw-r----- 1 wazuh wazuh    350 Jan  2 00:00 ossec-archive-03.json.sum  
--rw-r----- 1 wazuh wazuh 156296 Jan  2 00:00 ossec-archive-03.log.gz  
--rw-r----- 1 wazuh wazuh    346 Jan  2 00:00 ossec-archive-03.log.sum`
+  total 176  
+  -rw-r----- 1 wazuh wazuh 234350 Jan 2 00:00 ossec-archive-01.json.gz  
+  -rw-r----- 1 wazuh wazuh 350 Jan 2 00:00 ossec-archive-01.json.sum  
+  -rw-r----- 1 wazuh wazuh 176221 Jan 2 00:00 ossec-archive-01.log.gz  
+  -rw-r----- 1 wazuh wazuh 346 Jan 2 00:00 ossec-archive-01.log.sum  
+  -rw-r----- 1 wazuh wazuh 224320 Jan 2 00:00 ossec-archive-02.json.gz  
+  -rw-r----- 1 wazuh wazuh 350 Jan 2 00:00 ossec-archive-02.json.sum  
+  -rw-r----- 1 wazuh wazuh 151642 Jan 2 00:00 ossec-archive-02.log.gz  
+  -rw-r----- 1 wazuh wazuh 346 Jan 2 00:00 ossec-archive-02.log.sum  
+  -rw-r----- 1 wazuh wazuh 315251 Jan 2 00:00 ossec-archive-03.json.gz  
+  -rw-r----- 1 wazuh wazuh 350 Jan 2 00:00 ossec-archive-03.json.sum  
+  -rw-r----- 1 wazuh wazuh 156296 Jan 2 00:00 ossec-archive-03.log.gz  
+  -rw-r----- 1 wazuh wazuh 346 Jan 2 00:00 ossec-archive-03.log.sum
 
 - Wazuh recommends backups according to the storage capacity of the Wazuh server.
 - Wazuh suggest using cron jobs to only keep a specified window of backups (3 months, 6 months, a year, depending on storage limitations)
@@ -171,7 +171,7 @@ If you're planning on running multiple servers, or want a "base server install" 
 2. When you get to "Guided Storage Configuration" select `( ) Custom storage layout`
 3. Create a boot partition:
 
-   - Select "free space" under AVAILABLE DEVICES, Select "Add GPT Partition", Size: `512M`, Format: `Leave unformatted`
+   - Select "free space" under AVAILABLE DEVICES, Select "Add GPT Partition", Size: 512M, Format: Leave unformatted
 
 4. Create a swap partition:
 
@@ -184,7 +184,7 @@ If you're planning on running multiple servers, or want a "base server install" 
 - I've decided to go with one large partition because I'm not exactly sure how much space is going to be used up in /var, /opt, /home, etc.
 - This option lets us run, configure, and install anything we need on our ubuntu server without having to worry about running out of space in a partition we underestimate.
 
-3. Skip for now on Upgrade to Ubuntu Pro.
+3. "Skip for now" on Upgrade to Ubuntu Pro.
 4. (X) Install OpenSSH server
 5. You can look through the "Featured Server Snaps" to see if anything looks interesting, we are just using wazuh on the server, so we shouldn't need any of these options.
 6. If you get errors after selecting "Reboot now," just ctrl+c and it should be able to reboot (it will unmount the installation media).
@@ -213,6 +213,7 @@ The Wazuh documentation is pretty easy to follow. We will just need to follow th
 - From a browser on your host machine, enter: `https://<server IP>`
 - You will get a warning about certificates, but we know what we're accessing (we're hosting it after all), so we continue to the dashboard.
 - You'll notice there is no option for an Arch Linux install using "add agent" button. You'll have to find the documentation for installation on their documentation page, ["Installing The Wazuh agent from sources"](https://documentation.wazuh.com/current/deployment-options/wazuh-from-sources/wazuh-agent/index.html)
+
   **Installing a Wazuh agent on Arch Linux:**
 
 1. Install the recommended packages, a lot of these we already have installed, but that's ok:
@@ -241,7 +242,7 @@ The Wazuh documentation is pretty easy to follow. We will just need to follow th
    - Select y or press enter if you want to run a rootkit detection engine.
    - Select y or press enter if you want to enable active response.
    - Select y if you want to add more certificates (default is no).
-   - If you want to monitor any other file, just change the ossec.conf and add a new localfile entry. Any questions about the configuration can be answered by visiting us online at https://documentation.wazuh.com/.
+   - "If you want to monitor any other file, just change the ossec.conf and add a new localfile entry. Any questions about the configuration can be answered by visiting us online at https://documentation.wazuh.com/."
 
 1. Press enter and watch'er go!
 1. The final print out from the installation:
@@ -276,7 +277,9 @@ This print out is a little misleading. To start the agent you need to enter the 
 This will start the agent as a service so it will persist after you reboot.
 
 If you reload your browser the Wazuh Dashboard, you should see your total agents are now 1.  
-You can also check if your wazuh-manager.service is running on your server. Connect through ssh and enter `sudo systemctl wazuh-manager.service`. It should say `Active: active (running)`
+You can also check if your wazuh-manager.service is running on your server.
+
+- Connect through ssh and enter `sudo systemctl wazuh-manager.service`. It should say `Active: active (running)`
 
 Adding additional agents is really easy if you're running windows, a linux distro using apt or rpm, or macOS.
 Just go to the wazuh drop down, select agents, then deploy new agent. It will give you copy and paste commands to add the agents, super quick and easy.
@@ -285,20 +288,22 @@ Just go to the wazuh drop down, select agents, then deploy new agent. It will gi
 
 It's time to see how good/bad our basic Arch Linux install is!  
 Here's a look at our new dashboard:  
-![Wazuh Dashboard]()  
+![Wazuh Dashboard](https://github.com/Xerips/ArchLinux/blob/main/Defence!/Wazuh-SIEM/wazuh-dashboard.png)  
 Let's start move to our agents dashboard to see our active agent. You can do this by clicking on the "1" under "Total agents" or "Active agents," otherwise, you can click the downward arrow beside "wazuh." at the top of the dashboard and select "Agents."  
 This will bring up the following dashboard:  
-![Agents Dashboard]()  
+![Agents Dashboard](https://github.com/Xerips/ArchLinux/blob/main/Defence!/Wazuh-SIEM/agents-dashboard.png)  
 In this dashboard we will be able to see all of our agents, and can click on them to drill deeper into what's going on and what the wazuh scans have returned.  
 Click on the arch agent as the red arrow in the picture indicates to visit the specific agent's dashboard.  
-![Arch Agent Dashboard]()  
+![Arch Agent Dashboard](https://github.com/Xerips/ArchLinux/blob/main/Defence!/Wazuh-SIEM/arch-agent-dashboard.png)  
 I've highlighted some of the boxes to point out some cool features.
 
 - The **Orange box** shows MITRE ATT&CK results which leverages the MITRE ATT&CK knowledge base of adversary tactics and techniques that you're system could be vulnerable to. This is a super easy way to quickly visualize issues that may interfere with effective cybersecurity.
 - The **Red box** is useful for those who need to comply with specific standards like Payment Card Industry Data Security Standard (PCI DSS) or NIST 800-53 which is the National Institute of Standards and Technology's Security and Privacy Controls for Information Systems and Organizations. I know it's a mouth full. Imagine how much easier it would be to comply to these standards by having your SIEM do a scan and let you know what you need to get in compliance than to otherwise have to step through the (very) lengthy documentation and compare those standards to your system configurations. If you need to be in compliance to any of these standards, it's definitely important to be intimately familiar with them, but if you're just starting out what a great way to get familiar!
 - The **Purple box** shows FIM: Recent events. This is our file integrity monitoring window. This box will show any alerts that are triggered when the Wazuh agent scans the directory paths it's been configured to look through for any file changes. It will look for file modifications by comparing the checksums of a file to it's stored checksums and attribute values, then generates an alert if it finds any discrepancies.
 - The **Cyan box** Is the Security Configuration Assessment. Let's click on the "System audit for Unix based systems" and see why we only got a score of 14%.
-  ![SCA-Arch Scan]()
+
+  ![SCA-Arch Scan](https://github.com/Xerips/ArchLinux/blob/main/Defence!/Wazuh-SIEM/SCA-arch.png)
+
 - I've clicked on the first failed scan which is titled "SSH Hardening: Port should not be 22." This one is a bit of a weak alert, seeing as changing the SSH port to something non-default would be considered "Security through Obscurity" which is commonly said to be "No security at all." Wazuh does however provide a "Rationale" to communicate why the suggestion to change the port number was given. They also tell you in "Remediation" where to make the changes to pass the test, a "Description" of what's going on, which seems to be almost an extension of "Remediation," and under "Compliance" it shows where it has gotten these check rules from (NIST_800_53: CM.1 and PCI_DSS: 2.2.4).
 - This makes it super easy to make changes to get into compliance, understand why the compliance standard is in place, and where to look for more information.
 - Let's step through the failed tests and see if we can get our system on the right track!
@@ -316,9 +321,12 @@ I've highlighted some of the boxes to point out some cool features.
 
 - Looks like we're in the right place to do some system wide configuration.
 - We can use the `ss` command which shows socket statistics on linux machines.
-  - Get a list of all open ports with `ss -` and search who is responsible for opening a specific port with `ss -lp | grep <specific port>` - Finding out if a specific port is in use is valuable so we don't accidentally assign a port to ssh that is already in use.
+  - Get a list of all open ports with `ss -l` and search who is responsible for opening a specific port with `ss -lp | grep <specific port>` - Finding out if a specific port is in use is valuable so we don't accidentally assign a port to ssh that is already in use.
 - Now we have the tools we need and the info on what to change, let's make some quick changes, restart the wazuh agent to re-scan our system, and see what happens to our System Audit score...
-  ![SCA Fixed]()
+  ![SCA Fixed](https://github.com/Xerips/ArchLinux/blob/main/Defence!/Wazuh-SIEM/SCA-Fixed.png)
 - There we have it! Because of the easy to follow breakdown, with 2 config files, 1 terminal command, and a few minutes of changes we increased our System audit score from 14% to 92%. It should be 100%. I fixed the LoginGraceTime 120 failure but for some reason wazuh isn't picking up on it. This is something to look into, not something to ignore. There is a reason why that check failed, but it just wasn't obvious.
+- If we go back to our Arch menu, we can see we've generated some MITRE ATT&CK events when we restarted our agent. There's 6 because that's how many time I tried different combinations of the LoginGraceTime time variable and reloaded the agent to see if wazuh would pick up on it.
+
+![Arch Agent Dashboard 2](https://github.com/Xerips/ArchLinux/blob/main/Defence!/Wazuh-SIEM/arch-agent-dashboard2.png)
 
 There is so much more you can do with wazuh and a SIEM in general. It's hard to believe that a SIEM like this is so easy to use, open source, and completely free to do what we've done here! I'll be doing more with wazuh as I get into more fun stuff with our "Dirty Twin," and I'll definitely be setting up an agent on a windows machine to play around with that as well! Stay tuned nerds, the fun is just starting!

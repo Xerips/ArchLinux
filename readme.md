@@ -1,5 +1,7 @@
 # Arch Linux
 
+If you're interested in some good old fashioned cyber mischief, check out my repo on [Black Hat Python](https://github.com/Xerips/BlackHatPython)!
+
 ## Table of contents
 
 ### [Arch Linux Installation](https://github.com/Xerips/ArchLinux/tree/main/ArchLinuxInstallation)

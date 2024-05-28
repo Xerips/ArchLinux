@@ -72,9 +72,9 @@ If you're looking for a detailed guide on setting up your virtual machine client
 
 Immediate Problems! You'll notice after logging into your VM for the first time that mod + r (the default qtile launch shortcut) will open up our hosts Rofi launcher. Don't panic! What we have to do is set different mod keys for each system.
 
-- We will change our hosts mod key in the ~/.config/qtile/config.py to the ALT key. You can do this by changing the `mod = "mod4"` under our ######## Variables ######## header at the top of config.py to `mod = "mod1"` and then reloading qtile with mod4 + ctrl + r.
+- We will change our hosts mod key in the ~/.config/qtile/config.py to the ALT key. You can do this by changing the `mod = "mod4"` under our `######## Variables ########` header at the top of config.py to `mod = "mod1"` and then reloading qtile with mod4 + ctrl + r.
   Now our host's mod key is set to alt. This will let us use the default settings for qtile in the new VM.
-- Move to your VM and use the `mod+r` to open alacritty, then download the package list we created with our host system through github, or a other service that you save your configs and setup files to.
+- Move to your VM and use the `mod+r` to open alacritty, then download the package list we created with our host system through github, or any other service that you save your configs and setup files to.
   - Install pacman packages with `sudo pacman -S < pkglist.txt`
 - Download your .config files which you should have backed up via github or similar services. It's best to save these to a private repo.
 - Reload Qtile with `mod+shift+r`
@@ -84,6 +84,7 @@ Immediate Problems! You'll notice after logging into your VM for the first time 
 
 - If you're experiencing issues, you can drop into a tty by selecting the `Send Key` menu drop down and then selecting `Ctrl+Alt+F2` through `Ctrl+Alt+F6`. To return to the GUI select `Ctrl+Alt+F7`.
   - This will give you access to a terminal (tty) to work on the system without entering your GUI. It can be helpful if you get black screened, or if you forgot to install alacritty (or other terminal emulator) you can use the tty to install one (I forget to install a terminal emulator all the time...).
+- I recommend re-running through my [ArchLinuxInstallation](https://github.com/Xerips/ArchLinux/blob/main/ArchLinuxInstallation/readme.md) guide for your first setup to make sure all the manual configuration is done. After getting your VM setup the way you like it, make a clone/snapshot/whatever so you can revert back to this clean fully setup state.
 
 The last thing to do is to install the black arch repo. You can find instructions on how to install the black arch repo on top of arch linux at [blackarch.org/downloads.html](https://blackarch.org/downloads.html).
 

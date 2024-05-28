@@ -386,8 +386,9 @@ return {
 
 This is my first time using Qtile and I have to admit, it's freaking awesome!  
 I've added the config.py as a separate file because it's quite large. I've also added a screenshot of what my config looks like in case you're interested in the old, "bibbity bobbity, your dotfiles are now my property."  
-There's simply too much in the config to walk through it all here but I've made a bunch of comments in the config and it's pretty readable. Take a look through it and change what makes sense for you.  
-**For this config to work** you will need to use an AUR helper to download qtile_extras. I use [yay](https://itsfoss.com/install-yay-arch-linux/).
+There's simply too much in the config to walk through it all here but I've made a bunch of comments in the config and it's pretty readable. Take a look through it and change what makes sense for you.
+
+**For this config to work** you will need to use an AUR helper to download qtile_extras. I use [yay](https://itsfoss.com/install-yay-arch-linux/). For the bar info like mem and cpu, you will need to download python-psutil.
 
 Tips Tricks:
 

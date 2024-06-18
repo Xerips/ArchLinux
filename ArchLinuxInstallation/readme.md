@@ -5,13 +5,11 @@
 #### Notes:
 
 - Soooo, I broke my system... And I was really mad... Because I wasn't set up properly to recover said system. I didn't have a current install script to get all of the packages I had installed, only part of my work was backed up to github in private and public repos, I hadn't pushed my config files in a while, aaaand I had no physical backups. To be fair, I was mad at me, not at my system. After all, your system is what you make it.
-- With that embarassing admission out of the way, it's time to make it much better than it was before and put some lessons learned into practice!
+- With that embarrassing admission out of the way, it's time to make it much better than it was before and put some lessons learned into practice!
 - Once we have everything here set up, we should never have to go through all of this again - unless we want to play around with a fresh install. We backup the /home directory and all of the configuration files existing in ~/.config and our work is saved in /home as well. The only thing you will have to add is all of the requirements after restoring a backup from either github or your backup drive. I have saved my post config packages as base_packages.pacman, which is created with: `sudo pacman -Qqe > base_packages.pacman`.
 - I haven't included any pen-testing, forensic, or other cyber security tools but they would be easily added by running ` sudo pacman -Qqe > all_packages.pacman` after you've install everything you need.
 - To install packages from one of these files enter the following from your terminal: `sudo pacman -S < base_packages.pacman`
 - I've also included a script named new_packages.py. I use this to determine what new packages I've installed while working on a specific project. If you have a "current_packages.pacman" list that was generated before you start your new project, you can run this script when you finish your project to determine what the requirements are for the new project, specifically.
-
----
 
 ### Setting up Grsync and a Backup Drive:
 

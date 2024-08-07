@@ -12,4 +12,6 @@ In this directory you will find a step by step installation guide for my Arch Li
 
 ### [Dirty Twin](https://github.com/Xerips/ArchLinux/tree/main/DirtyTwin)
 
-"Dirty Twin" is a VM copy of our Arch Linux Installation. We use this VM for testing unstable, experimental, or anything that might break out machine. Do the install, make a clone, mess up the clone, delete the clone, clone our original again to get back to a clean testing environment.
+"Dirty Twin" is a VM copy of our Arch Linux Installation. We use this VM for testing unstable, experimental, or anything that might break our machine.
+
+- Do the install, make a clone, mess up the clone, delete the clone, clone our original again to get back to a clean testing environment.

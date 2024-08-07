@@ -486,3 +486,14 @@ I'd call this a base install. Now all that's left to do is add the [black arch](
 ![Nvim + Tmux](https://github.com/Xerips/ArchLinux/blob/main/ArchLinuxInstallation/tmux-nvim.png)
 
 I also have a directory called [DirtyTwin]. This directory is where we build a replica of our host system. The point of it is simple: mess it up. Not quite sure about that download? Download it here (be careful, you're host is on the same subnet)! Wanna mess around with another tiling window manager or test applications out before you move them to your "production" or host machine? This is a great place to do it.
+
+### Updating Mirrors
+
+You will eventually find that pacman stops updating packages that you know have available updates. This is an indication that either your mirrors need to be updated. In the worst case scenario, it may be that your `/var/lib/pacman/local/` has been corrupted or deleted.
+
+- The easiest way to update your mirrors is by using something like reflector.
+  - Download Reflector: `sudo pacman -S reflector`
+  - Backup your current mirror list: `sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak`
+  - Update mirrors using the 20 fastest download rate mirrors: `sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist`
+  - Verify the list: `cat /etc/pacman.d/mirrorlist`
+- If this doesn't work, try this link to resolve: [pacman/Restore Local database](https://wiki.archlinux.org/title/Pacman/Restore_local_database)

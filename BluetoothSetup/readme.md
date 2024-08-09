@@ -17,8 +17,8 @@ Start and Enable your bluetooth service on startup:
 - Scan for your bluetooth device: `scan on`
   - Copy the MAC address of the device you want to connect.
 - `pair <MAC address>` to pair with the device.
-- `connect <MAC address>` if your headphones done say "connected to blah blah blah."
-  - test to make sure you have audio.
+- `connect <MAC address>` if your headphones don't say "connected to blah blah blah."
+- Lastly, test to make sure you have audio.
 
 2. Reboot into your Windows drive and pair the device on the Windows installation.
 
